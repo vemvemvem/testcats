@@ -9,11 +9,11 @@ var half = 2
 // 1.5 Require local files
 
 var foodModel = require('../schemas/foodSchema.js')
+var randIntFunction = require('../functions/randint.js')
 
 // 2. Set up express
 
 var router = express.Router()
-
 
 router.get('/', function(req,res){
 	console.log(req.cookies)
@@ -22,7 +22,8 @@ router.get('/', function(req,res){
 	res.render('index.hbs', {
 		title: "Nutrition app", 
 		success: req.session.success,
-		errors: req.session.errors
+		errors: req.session.errors,
+		randInt: randIntFunction
 		});
 		req.session.errors = null;
 		});
@@ -70,7 +71,7 @@ router.post('/form_post', function(req,res) {
 			res.send(err)
 		} 
 }).then(function() {
-		res.render('index', {title:"success", success:true})
+		res.render('index', {title:"success", success:true, randInt: randIntFunction})
 	})
 }
 })	
@@ -92,6 +93,12 @@ router.post('/form_query', function(req,res) {
 			console.log('omg')
 		}
 	}).then(function(MongoDBdata){
+		// function randomIntFromInterval(min,max)
+		// {	
+  //   		return Math.floor(Math.random()*(max-min+1)+min);
+		// }
+		// var randomLength = randomIntFromInterval(1,MongoDBdata.length)
+
 		var data = { items: [] };
 		index = [];
 		for(var i=0; i < MongoDBdata.length; i++){
